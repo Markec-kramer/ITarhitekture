@@ -1,9 +1,58 @@
 name: Users Microservice CI
 
-on: [push]
+on:
+  push:
+    paths:
+      - 'users/**'
+      - '.github/workflows/users-ci.yml'
+  pull_request:
+    paths:
+      - 'users/**'
+      - '.github/workflows/users-ci.yml'
 
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: usersdb
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres -d usersdb"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    defaults:
+      run:
+        working-directory: users
+
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/usersdb?schema=public
+
     steps:
-      - run: echo "Workflow works"
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      - name: Run database migrations
+        run: npx prisma migrate deploy
+
+      - name: Run tests
+        run: npm test
