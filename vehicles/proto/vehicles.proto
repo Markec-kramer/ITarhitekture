@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package vehicles;
+
+enum VehicleType {
+  CAR = 0;
+  VAN = 1;
+  MOTORCYCLE = 2;
+}
+
+message Vehicle {
+  int32 id = 1;
+  string make = 2;
+  string model = 3;
+  VehicleType type = 4;
+  int32 year = 5;
+  float price_per_day = 6;
+  bool available = 7;
+  string branch = 8;
+  string license_plate = 9;
+}
+
+message GetVehicleRequest {
+  int32 id = 1;
+}
+
+message ListVehiclesRequest {
+  string type_filter = 1;
+  string branch_filter = 2;
+  bool available_only = 3;
+}
+
+message ListVehiclesResponse {
+  repeated Vehicle vehicles = 1;
+}
+
+message CreateVehicleRequest {
+  string make = 1;
+  string model = 2;
+  VehicleType type = 3;
+  int32 year = 4;
+  float price_per_day = 5;
+  bool available = 6;
+  string branch = 7;
+  string license_plate = 8;
+}
+
+message UpdateVehicleRequest {
+  int32 id = 1;
+  string make = 2;
+  string model = 3;
+  VehicleType type = 4;
+  int32 year = 5;
+  float price_per_day = 6;
+  bool available = 7;
+  string branch = 8;
+  string license_plate = 9;
+}
+
+message DeleteVehicleRequest {
+  int32 id = 1;
+}
+
+message DeleteVehicleResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+service VehiclesService {
+  rpc GetVehicle (GetVehicleRequest) returns (Vehicle);
+  rpc ListVehicles (ListVehiclesRequest) returns (ListVehiclesResponse);
+  rpc CreateVehicle (CreateVehicleRequest) returns (Vehicle);
+  rpc UpdateVehicle (UpdateVehicleRequest) returns (Vehicle);
+  rpc DeleteVehicle (DeleteVehicleRequest) returns (DeleteVehicleResponse);
+}

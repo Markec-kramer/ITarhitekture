@@ -1,0 +1,15 @@
+services:
+  vehicles:
+    build: .
+    ports:
+      - "50051:50051"   # gRPC
+      - "8000:8000"     # HTTP + Swagger UI
+    environment:
+      DATABASE_URL: sqlite:///./data/vehicles.db
+      GRPC_PORT: "50051"
+      HTTP_PORT: "8000"
+    volumes:
+      - vehicles_data:/app/data
+
+volumes:
+  vehicles_data:

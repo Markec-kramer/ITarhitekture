@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vehicles Service</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">Rental Portal</div>
+    <nav class="nav-links">
+      <a href="/">Vozila</a>
+      <a href="/docs" target="_blank">Swagger API</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="page-header">
+      <h1>Upravljanje vozil</h1>
+      <button class="btn-primary" onclick="openAddModal()">+ Dodaj vozilo</button>
+    </div>
+
+    <div class="filters">
+      <select id="filter-type" onchange="loadVehicles()">
+        <option value="">Vse vrste</option>
+        <option value="CAR">Avtomobili</option>
+        <option value="VAN">Kombiji</option>
+        <option value="MOTORCYCLE">Motorji</option>
+      </select>
+      <select id="filter-available" onchange="loadVehicles()">
+        <option value="false">Vsa vozila</option>
+        <option value="true">Samo dostopna</option>
+      </select>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Znamka</th>
+            <th>Model</th>
+            <th>Vrsta</th>
+            <th>Leto</th>
+            <th>€/dan</th>
+            <th>Dostopno</th>
+            <th>Podružnica</th>
+            <th>Tablica</th>
+            <th>Akcije</th>
+          </tr>
+        </thead>
+        <tbody id="vehicles-body">
+          <tr><td colspan="10" class="empty-row">Nalaganje...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Modal -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modal-title">Dodaj vozilo</h2>
+        <button class="close-btn" onclick="closeModal()">&#x2715;</button>
+      </div>
+      <form id="vehicle-form" onsubmit="submitForm(event)">
+        <input type="hidden" id="vehicle-id" />
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Znamka</label>
+            <input type="text" id="make" required placeholder="Toyota" />
+          </div>
+          <div class="form-group">
+            <label>Model</label>
+            <input type="text" id="model" required placeholder="Corolla" />
+          </div>
+          <div class="form-group">
+            <label>Vrsta</label>
+            <select id="type">
+              <option value="CAR">Avtomobil</option>
+              <option value="VAN">Kombi</option>
+              <option value="MOTORCYCLE">Motor</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Leto</label>
+            <input type="number" id="year" required min="1990" max="2030" placeholder="2022" />
+          </div>
+          <div class="form-group">
+            <label>Cena / dan (€)</label>
+            <input type="number" id="price_per_day" required step="0.01" min="0.01" placeholder="45.00" />
+          </div>
+          <div class="form-group">
+            <label>Reg. tablica</label>
+            <input type="text" id="license_plate" required placeholder="LJ-123-AB" />
+          </div>
+          <div class="form-group">
+            <label>Podružnica</label>
+            <input type="text" id="branch" required placeholder="Ljubljana" />
+          </div>
+          <div class="form-group">
+            <label>Dostopno</label>
+            <select id="available">
+              <option value="true">Da</option>
+              <option value="false">Ne</option>
+            </select>
+          </div>
+        </div>
+        <p id="form-error" class="form-error"></p>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" onclick="closeModal()">Prekliči</button>
+          <button type="submit" class="btn-primary">Shrani</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
